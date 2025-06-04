@@ -1,0 +1,134 @@
+agent:
+  _target_: IRL.algorithms.fdvl.fDVLAgent
+  use_ground_truth_reward: False
+  gamma: 0.99
+  tau: 0.005
+  alpha: 1.0                                                    # alpha for the fDVL Actor loss
+  lambda_: 0.7                                                  # lambda for the fDVL value net loss
+  ns_noise_frac: 0.05                                            # negative sampling perturbation noise (fraction of the state/action space)
+  ns_noise_penalty_std: 1.0                                     # How quickly we are reducing the value of the noisy states. Smaller -> Faster
+  neg_sampling_loss_coef: 1.0                                   # Coefficient for the negative sampling loss
+  norm_loss_coef: 1.0                                           # Coefficient for the normalization loss
+  reconstruction_loss_coef: 1.0                                 # Coefficient for the reconstruction loss
+  device: ${train.common.device}
+  seed: ${train.common.seed}
+  pretrain_visitnet_steps: 10000
+  batch_size: ${train.common.batch_size}
+  tensorboard_log: tb_logs
+  max_clip: 20.0 
+  value_loss_fn: chi-square                                   # options: ["chi-square", "reverse-kl", "total-variation"] 
+  policy: # get class from path
+    _target_: hydra.utils.get_class
+    path: IRL.algorithms.fdvl.fDVLPolicy
+  policy_kwargs:
+    squash_output: False
+    # --- Using MLPFlattenLastNExtractor ------------------
+    features_extractor_class: # get class from path
+      _target_: hydra.utils.get_class
+      path: IRL.networks.MLPFlattenLastNExtractor
+    features_extractor_kwargs:
+      net_arch: [256]
+      output_dim: 128
+      last_n: 1 #${environment.config.history_len}
+      skip: 1
+      relu_finish: False
+      normalize: False
+    #---------------------------------------------------
+    # --- Using LSTMFeaturesExtractor ------------------
+    # features_extractor_class: # get class from path
+    #   _target_: hydra.utils.get_class
+    #   path: IRL.networks.LSTMFeaturesExtractor
+    # features_extractor_kwargs:
+    #   hidden_size: 256
+    #   num_layers: 3
+    #---------------------------------------------------
+    # --- Using FlattenLastNExtractor ------------------
+    # visitnet_features_extractor_class: # get class from path
+    #   _target_: hydra.utils.get_class
+    #   path: IRL.networks.FlattenLastNExtractor
+    # visitnet_features_extractor_kwargs:
+    #   last_n: 1 #${environment.config.history_len}
+    #   skip: 1
+    #---------------------------------------------------
+    # --- Using MLPFlattenLastNExtractor ------------------
+    visitnet_features_extractor_class: # get class from path
+      _target_: hydra.utils.get_class
+      path: IRL.networks.MLPFlattenLastNExtractor
+    visitnet_features_extractor_kwargs:
+      net_arch: [128]
+      output_dim: 128
+      last_n: 1 #${environment.config.history_len}
+      skip: 1
+      relu_finish: True
+      normalize: True
+    #---------------------------------------------------
+    # --- Using LSTMFeaturesExtractor ------------------
+    # visitnet_features_extractor_class: # get class from path
+    #   _target_: hydra.utils.get_class
+    #   path: IRL.networks.LSTMFeaturesExtractor
+    # visitnet_features_extractor_kwargs:
+    #   hidden_size: 128
+    #   num_layers: 3
+    #   relu_finish: True
+    #   normalize: True
+    #---------------------------------------------------
+    
+    visitnet_class: # get class from path
+      _target_: hydra.utils.get_class
+      path: IRL.networks.SRNet
+    visitnet_kwargs:
+      share_features_extractor: False                                # If True, Features Extrator is not trained
+      net_arch: [256]
+      decoder_net_arch: [16]
+      use_layer_norm: True
+      activation_fn:
+        _target_: hydra.utils.get_class
+        path: torch.nn.ReLU
+    # ----------------------------------
+    critic_kwargs:
+      share_features_extractor: False
+      net_arch: [512, 256]
+      n_critics: 1
+      use_layer_norm: True
+      activation_fn:
+        _target_: hydra.utils.get_class
+        path: torch.nn.ReLU
+    actor_kwargs:
+      net_arch: [256, 128]
+      log_std_min: -20
+      activation_fn:
+        _target_: hydra.utils.get_class
+        path: torch.nn.ReLU
+    valuenet_kwargs:
+      share_features_extractor: False
+      net_arch: [512, 128]
+      use_layer_norm: True
+      activation_fn:
+        _target_: hydra.utils.get_class
+        path: torch.nn.ReLU
+    critic_optim_kwargs:
+      lr: 4e-4
+      weight_decay: 0.0
+    actor_optim_kwargs:
+      lr: 2e-4 
+      weight_decay: 0.0
+    valuenet_optim_kwargs:
+      lr: 4e-4 
+      weight_decay: 0.0
+    visitnet_optim_kwargs:
+      lr: 4e-4
+      weight_decay: 0.0
+    
+  replay_buffer_class: # get_class from path
+    _target_: hydra.utils.get_class
+    path: IRL.replay_buffers.SeqReplayBuffer
+  replay_buffer_kwargs:
+    n_envs: 1
+    seq_len: ${environment.config.history_len}
+
+saved_model_folder_extra: "default"
+saved_model_timestamp: ""
+saved_model_folder: ./models/fdvl/${environment.meta.name}/${algorithm.saved_model_folder_extra}/seed_${train.common.seed}${algorithm.saved_model_timestamp}/
+saved_model_name: best_model.zip
+saved_model_path: ${algorithm.saved_model_folder}${algorithm.saved_model_name}
+

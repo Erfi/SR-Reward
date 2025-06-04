@@ -1,0 +1,21 @@
+config:
+  _target_: IRL.environments.walker2d.Walker2d
+  render_mode: null
+  max_episode_steps: 1000    # Set to 1000 to match D4RL
+  history_len: 2
+  seed: ${train.common.seed}
+  # use_contact_forces: True # to correspond to d4rl's dataset format 
+
+meta:
+  name: Walker2d
+
+d4rl:
+  #dataset from: https://github.com/Farama-Foundation/D4RL/blob/71a9549f2091accff93eeff68f1f3ab2c0e0a288/d4rl/gym_mujoco/__init__.py#L114
+  env_name: walker2d
+  min_score: 1.629008
+  max_score: 4592.3
+  dataset_type: expert    # options [random, medium, medium_expert, expert]
+  dataset_random_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/gym_mujoco/walker2d_random.hdf5
+  dataset_medium_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/gym_mujoco/walker2d_medium.hdf5
+  dataset_expert_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/gym_mujoco/walker2d_expert.hdf5
+  dataset_medium_expert_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/gym_mujoco/walker2d_medium_expert.hdf5

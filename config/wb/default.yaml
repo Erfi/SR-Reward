@@ -1,0 +1,4 @@
+project: sr-reward
+entity: ???
+sync_tensorboard: True
+group: ???

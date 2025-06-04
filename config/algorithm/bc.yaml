@@ -1,0 +1,51 @@
+agent:
+  _target_: IRL.algorithms.bc.BCAgent
+  device: ${train.common.device}
+  seed: ${train.common.seed}
+  batch_size: ${train.common.batch_size}
+  learning_rate: 3e-4                                                           # only used for entropy coefficient
+  tensorboard_log: tb_logs
+
+  policy:
+    _target_: hydra.utils.get_class
+    path: IRL.algorithms.bc.BCPolicy
+  policy_kwargs:
+    squash_output: False
+    # --- Using LSTMFeaturesExtractor ------------------
+    # features_extractor_class: # get class from path
+    #   _target_: hydra.utils.get_class
+    #   path: IRL.networks.LSTMFeaturesExtractor
+    # features_extractor_kwargs:
+    #   hidden_size: 256
+    #   num_layers: 3
+    #---------------------------------------------------  
+    # --- Using MLPFlattenLastNExtractor ------------------
+    features_extractor_class: # get class from path
+      _target_: hydra.utils.get_class
+      path: IRL.networks.MLPFlattenLastNExtractor
+    features_extractor_kwargs:
+      net_arch: [256]
+      output_dim: 128
+      last_n: 1
+      skip: 1
+      relu_finish: False
+      normalize: False
+    #---------------------------------------------------
+    actor_kwargs:
+      net_arch: [256, 128]
+      log_std_min: -20
+    actor_optim_kwargs:
+      lr: 1e-4
+      weight_decay: 0.0
+  replay_buffer_class: # get_class from path
+    _target_: hydra.utils.get_class
+    path: IRL.replay_buffers.SeqReplayBuffer
+  replay_buffer_kwargs:
+    n_envs: 1
+    seq_len: ${environment.config.history_len}
+
+saved_model_folder_extra: "default"
+saved_model_timestamp: ""
+saved_model_folder: ./models/bc/${environment.meta.name}/${algorithm.saved_model_folder_extra}/seed_${train.common.seed}${algorithm.saved_model_timestamp}/
+saved_model_name: best_model.zip
+saved_model_path: ${algorithm.saved_model_folder}${algorithm.saved_model_name}

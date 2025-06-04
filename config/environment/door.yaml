@@ -1,0 +1,22 @@
+#NOTE: https://github.com/Farama-Foundation/D4RL/blob/master/d4rl/hand_manipulation_suite/__init__.py 
+#NOTE2: for human envs a long-horizon environment is instantiated with mmax_episode_steps= LONG_HORIZONS = {'hammer': 600, 'pen': 200, 'relocate': 500, 'door': 300}
+
+config:
+  _target_: IRL.environments.door.Door
+  render_mode: null
+  max_episode_steps: 200 
+  history_len: 2
+  seed: ${train.common.seed}
+
+meta:
+  name: Door
+
+d4rl:
+  env_name: door
+  min_score: -56.512833
+  max_score: 2880.5693087298737
+  dataset_type: expert-v1   # options [cloned-v1, human-v1, expert-v1]
+  dataset_cloned-v1_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/hand_dapg_v1/door-cloned-v1.hdf5
+  dataset_human-v1_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/hand_dapg_v1/door-human-v1.hdf5
+  dataset_expert-v1_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/hand_dapg_v1/door-expert-v1.hdf5
+

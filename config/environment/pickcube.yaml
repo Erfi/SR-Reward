@@ -1,0 +1,28 @@
+config:
+  _target_: IRL.environments.pickcube.PickCube
+  render_mode: null
+  max_episode_steps: 500
+  history_len: 10
+  seed: ${train.common.seed}
+  obs_mode: state
+  control_mode: pd_ee_delta_pose                  # or pd_joint_delta_pos or pd_ee_delta_pose
+  reward_mode: sparse                             # or normalized_dense
+  camera_cfgs:                                    # camera configurations should match the ones from demonstrations
+    base_camera:
+      width: 128
+      height: 128
+      near: 0.01
+      far: 10
+    hand_camera:
+      width: 128
+      height: 128
+      near: 0.01
+      far: 10
+
+meta:
+  name: PickCube
+
+d4rl: # not a d4rl dataset but just to be used for normalization and plotting
+  env_name: PickCube
+  min_score: 0.0
+  max_score: 1.7

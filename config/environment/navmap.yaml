@@ -1,0 +1,36 @@
+config:
+  _target_: IRL.environments.navmap.NavMap
+  size: 20
+  start: [18, 18]
+    # - [10, 20]
+    # - [0, 10]
+    # - [10, 0]
+    # - [20, 10]
+  goal: [10, 12] #[10, 10]
+  goal_radius: 0.6
+  action_scale: 0.5
+  max_episode_steps: 200
+  history_len: 2
+  render_mode: null
+  seed: ${train.common.seed}
+
+  #----L shape ----
+  # walls:
+  #   - [0, 6, 16, 7]
+
+  #--- Loop ----
+  walls:
+    - [16, 6, 17, 20]
+    - [3, 6, 17, 7]
+    - [3, 7, 4, 17]
+    - [3, 17, 9, 18]
+
+meta:
+  name: NavMap
+
+d4rl: # not a d4rl dataset but just to be used for normalization and plotting
+  env_name: NavMap
+  min_score: 0.0
+  max_score: 0.88
+
+#python main.py mode=collect_data environment=navmap environment.config.history_len=1 environment.config.render_mode=human algorithm=manual memory.capacity=50  

@@ -1,0 +1,20 @@
+config:
+  _target_: IRL.environments.pen.Pen
+  render_mode: null
+  max_episode_steps: 100
+  history_len: 2
+
+  seed: ${train.common.seed}
+
+meta:
+  name: Pen
+
+d4rl:
+  env_name: pen
+  min_score: 96.262799
+  max_score: 3076.8331017826877 
+  dataset_type: expert-v1   # options [cloned-v1, human-v1, expert-v1]
+  dataset_cloned-v1_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/hand_dapg_v1/pen-cloned-v1.hdf5
+  dataset_human-v1_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/hand_dapg_v1/pen-human-v1.hdf5
+  dataset_expert-v1_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/hand_dapg_v1/pen-expert-v1.hdf5
+

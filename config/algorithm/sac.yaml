@@ -1,0 +1,21 @@
+agent:
+  _target_: stable_baselines3.sac.SAC
+  policy: MlpPolicy
+  policy_kwargs:
+    net_arch: [128, 128]
+  gamma: 0.99 
+  learning_rate: 3e-4 
+  buffer_size: 100000
+  train_freq: 1 
+  batch_size: ${train.common.batch_size} 
+  learning_starts: 1000 
+  verbose: 1  
+  device: ${train.common.device}
+  _init_setup_model:  True  
+  tensorboard_log: tb_logs
+
+saved_model_folder_extra: "default"
+saved_model_timestamp: ""
+saved_model_folder: ./models/sac/${environment.meta.name}/${algorithm.saved_model_folder_extra}/seed_${train.common.seed}${algorithm.saved_model_timestamp}/
+saved_model_name: best_model.zip
+saved_model_path: ${algorithm.saved_model_folder}${algorithm.saved_model_name}

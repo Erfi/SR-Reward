@@ -1,0 +1,10 @@
+defaults:
+  - environment: hopper          
+  - algorithm: sparseql                                
+  - memory: replay_buffer
+  - train: default
+  - wb: default
+  - _self_
+
+mode: ???                                         # one of {'train_rl', 'collect_data', 'train_IRL', 'evaluate'}
+

@@ -1,0 +1,18 @@
+config:
+  _target_: IRL.environments.hammer.Hammer
+  render_mode: null
+  max_episode_steps: 200 
+  history_len: 2
+  seed: ${train.common.seed}
+
+meta:
+  name: Hammer
+
+d4rl:
+  env_name: hammer
+  min_score: -274.856578 
+  max_score: 12794.134825156867 
+  dataset_type: expert-v1   # options [cloned-v1, human-v1, expert-v1]
+  dataset_cloned-v1_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/hand_dapg_v1/hammer-cloned-v1.hdf5
+  dataset_human-v1_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/hand_dapg_v1/hammer-human-v1.hdf5
+  dataset_expert-v1_url: https://rail.eecs.berkeley.edu/datasets/offline_rl/hand_dapg_v1/hammer-expert-v1.hdf5

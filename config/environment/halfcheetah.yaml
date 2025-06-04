@@ -1,0 +1,20 @@
+config:
+  _target_: IRL.environments.halfcheetah.HalfCheetah
+  render_mode: null
+  max_episode_steps: 1000
+  history_len: 2
+  seed: ${train.common.seed}
+
+meta:
+  name: HalfCheetah
+
+d4rl:
+  #dataset from: https://github.com/Farama-Foundation/D4RL/blob/71a9549f2091accff93eeff68f1f3ab2c0e0a288/d4rl/gym_mujoco/__init__.py#L114
+  env_name: halfcheetah
+  min_score: -280.178953
+  max_score: 12135.0
+  dataset_type: expert    # options [random, medium, medium_expert, expert]
+  dataset_random_url: http://rail.eecs.berkeley.edu/datasets/offline_rl/gym_mujoco/halfcheetah_random.hdf5
+  dataset_medium_url: http://rail.eecs.berkeley.edu/datasets/offline_rl/gym_mujoco/halfcheetah_medium.hdf5
+  dataset_expert_url: http://rail.eecs.berkeley.edu/datasets/offline_rl/gym_mujoco/halfcheetah_expert.hdf5
+  dataset_medium_expert_url: http://rail.eecs.berkeley.edu/datasets/offline_rl/gym_mujoco/halfcheetah_medium_expert.hdf5

@@ -1,0 +1,3 @@
+capacity: 100000
+saved_memory_filename: ./demos/${environment.meta.name}_demo.pkl
+extra_memory_filename: null                                                # used for ReCOIL because it needs two datasets (expert and non-expert)
